@@ -235,6 +235,8 @@ export function Profile() {
             src={
               "https://jrhgdi3j25.ufs.sh/f/6B6ZcglZUrRwPcdmjxWEFHroJwhjTspQMV5O3aNIumB1Se9Z"
             }
+            width={500}
+            height={500}
             alt="Profile Picture"
             className="w-full h-full object-cover rounded-full"
           />

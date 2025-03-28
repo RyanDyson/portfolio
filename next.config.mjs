@@ -6,6 +6,14 @@ const nextConfig = {
 
     return config;
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "jrhgdi3j25.ufs.sh",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
