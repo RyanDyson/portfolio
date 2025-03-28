@@ -11,7 +11,7 @@ import { RiTailwindCssFill } from "react-icons/ri";
 import { SiPrisma } from "react-icons/si";
 import { BiLogoPostgresql } from "react-icons/bi";
 import { SiTypescript } from "react-icons/si";
-import PFP from "@/../../public/ryan.jpg";
+import PFP from "../../../public/ryan.jpg";
 import { CustomButton } from "../CustomButton";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
