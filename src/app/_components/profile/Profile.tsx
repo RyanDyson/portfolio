@@ -11,7 +11,6 @@ import { RiTailwindCssFill } from "react-icons/ri";
 import { SiPrisma } from "react-icons/si";
 import { BiLogoPostgresql } from "react-icons/bi";
 import { SiTypescript } from "react-icons/si";
-import PFP from "../../../public/ryan.jpg";
 import { CustomButton } from "../CustomButton";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
@@ -233,7 +232,9 @@ export function Profile() {
           className="h-auto border-2 border-yellow-100 md:w-3/5 max-w-[500px] mx-auto rounded-full"
         >
           <Image
-            src={PFP}
+            src={
+              "https://jrhgdi3j25.ufs.sh/f/6B6ZcglZUrRwPcdmjxWEFHroJwhjTspQMV5O3aNIumB1Se9Z"
+            }
             alt="Profile Picture"
             className="w-full h-full object-cover rounded-full"
           />
