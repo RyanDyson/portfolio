@@ -10,9 +10,19 @@ import { useRef, useState, useEffect } from "react";
 import { Loading } from "./_components/loading/Loading";
 import { motion, AnimatePresence } from "framer-motion";
 import { Footer } from "./_components/Footer";
-import { type Project } from "@/db/schema";
+import {
+  type Project,
+  type WorkExperience,
+  type BulletPoint,
+} from "@/db/schema";
 
-export function ClientPage({ projects }: { projects: Project[] }) {
+export function ClientPage({
+  projects,
+  workExperience,
+}: {
+  projects: Project[];
+  workExperience: (WorkExperience & { bulletPoints: BulletPoint[] })[];
+}) {
   const homeRef = useRef<HTMLDivElement>(null);
   const isHomeInView = useInView(homeRef);
   const [isHomeVisible, setIsHomeVisible] = useState(true);
@@ -57,7 +67,7 @@ export function ClientPage({ projects }: { projects: Project[] }) {
         <div className="relative z-10">
           <Navigation isHomeInView={!isHomeVisible} />
           <Home ref={homeRef} />
-          <Profile />
+          <Profile workExperience={workExperience} />
           <Projects projects={projects} />
           <Contact />
         </div>

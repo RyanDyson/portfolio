@@ -14,22 +14,8 @@ import { SiTypescript } from "react-icons/si";
 import { CustomButton } from "../CustomButton";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-// import type { PDFDocumentProxy } from "pdfjs-dist";
-// import useMeasure from "react-use-measure";
 import Link from "next/link";
-import { FaBriefcase, FaCode, FaLaptopCode } from "react-icons/fa6";
-
-// pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-//   "pdfjs-dist/build/pdf.worker.min.mjs",
-//   import.meta.url
-// ).toString();
-
-const options = {
-  cMapUrl: "/cmaps/",
-  standardFontDataUrl: "/standard_fonts/",
-};
-
-type PDFFile = string | File | null;
+import { type WorkExperience, type BulletPoint } from "@/db/schema";
 
 const Name = [
   {
@@ -71,62 +57,42 @@ const stack = [
   },
 ];
 
-const workExperience = [
-  {
-    company: "WeMakeApp",
-    position: "Intern Software Engineer",
-    duration: "June 2024 - Augut 2024",
-    description: (
-      <ul>
-        <li>
-          Teamed up with a group of 5 people to deliver a live streaming service
-          with a proprietary built in content management system with Integrated
-          internationalization support for 4 languages (English, Spanish,
-          Cantonese, Vietnamese).
-        </li>
-        <li>
-          Built responsive UI components across 20+ pages including a
-          notification dropdown with optimized database queries for user
-          notifications and activities via implementation of TRPC endpoints
-          which reduce API response time by 25%.
-        </li>
-        <li>
-          Learned and deployed advance tech-stack consists of TypeScript, React,
-          NEXTjs, TailwindCSS, Prisma, TRPC, Supabase PostgreSQL,
-        </li>
-      </ul>
-    ),
-    icon: <FaLaptopCode />,
-  },
-  {
-    company: "Company B",
-    position: "Frontend Developer",
-    duration: "Jun 2020 - Dec 2021",
-    description:
-      "Developed responsive user interfaces using React and TailwindCSS.",
-    icon: <FaCode />,
-  },
-  {
-    company: "Company C",
-    position: "Intern",
-    duration: "Jan 2020 - May 2020",
-    description:
-      "Assisted in the development of internal tools and applications.",
-    icon: <FaBriefcase />,
-  },
-];
+function formatDate(date: string) {
+  const dateObj = new Date(date);
+  return dateObj.toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+}
 
 const bioText =
   "Computer Science student at City University of Hong Kong. I am a Full Stack Developer and UI/UX Designer. I am passionate about creating beautiful and functional websites. I am always looking for new opportunities to learn and grow.";
 
-export function Profile() {
+export function Profile({
+  workExperience,
+}: {
+  workExperience: (WorkExperience & { bulletPoints: BulletPoint[] })[];
+}) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [workExperienceIndex, setWorkExperienceIndex] = useState<number | null>(
+    null
+  );
+  const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
   const ref = useRef<HTMLDivElement | null>(null);
   const isShown = useInView(ref);
-  // const [ref, { width }] = useMeasure();
 
-  // const [numPages, setNumPages] = useState<number>();
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    const target = event.currentTarget;
+    const rect = target.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    setMousePosition({ x, y });
+  };
+
   const enhancedTextClassName = (index: number) => {
     return `word fancy text-center flex text-3xl md:text-4xl transition ease-in-out duration-300 ${
       hoveredIndex !== null && hoveredIndex !== index
@@ -134,31 +100,6 @@ export function Profile() {
         : "hover:text-amber-100"
     }`;
   };
-
-  // function onDocumentLoadSuccess(document: PDFDocumentProxy): void {
-  //   const { numPages: nextNumPages } = document;
-  //   setNumPages(nextNumPages);
-  // }
-
-  // const DialogContent = () => {
-  //   const pdfWidth = width * (2 / 3);
-
-  //   return (
-  //     <div ref={ref} className="w-full h-full p-4 flex gap-x-4 overflow-scroll">
-  //       {/* <Document file="cv.pdf" options={options} className="rounded-lg">
-  //         {Array.from(new Array(numPages), (_el, index) => (
-  //           <Page
-  //             key={`page_${index + 1}`}
-  //             pageNumber={index + 1}
-  //             width={pdfWidth}
-  //           />
-  //         ))}
-  //       </Document>
-  //       <div></div> */}
-  //     </div>
-  //   );
-  // };
-
   const container = {
     hidden: {
       opacity: 0,
@@ -289,25 +230,58 @@ export function Profile() {
         className="mt-16"
       >
         <DisplayText>Work Experience</DisplayText>
-        <div className="flex flex-col gap-y-4 mt-4">
+        <div className="flex flex-col gap-y-8 mt-8">
           {workExperience.map((experience, index) => (
             <motion.div
               key={index}
               variants={child}
-              className="bg-blue-700 hover:bg-yellow-50 transition-colors duration-100 hover:text-blue-900 p-4 rounded-lg flex items-start gap-x-4"
+              onMouseMove={handleMouseMove}
+              onMouseLeave={() => setWorkExperienceIndex(null)}
+              onMouseEnter={() => setWorkExperienceIndex(index)}
+              style={
+                {
+                  "--mouse-x": `${mousePosition.x}px`,
+                  "--mouse-y": `${mousePosition.y}px`,
+                } as React.CSSProperties
+              }
+              className={`relative bg-gradient-to-br from-[rgb(30,58,138)] to-[rgb(30,64,175)] transition-all duration-300 p-6 rounded-xl flex flex-col gap-y-4 overflow-hidden border-2 border-yellow-100 before:content-[''] before:absolute before:inset-0 before:opacity-0 before:transition-opacity before:duration-300 before:ease-out before:bg-[radial-gradient(circle_at_var(--mouse-x)_var(--mouse-y),rgb(59,130,246)_0%,rgb(30,58,138)_75%)] before:pointer-events-none before:-z-10 ${
+                workExperienceIndex === index ? "before:opacity-90" : ""
+              }`}
             >
-              <div className="text-4xl">{experience.icon}</div>
-              <div>
-                <CommonText className="text-xl font-bold">
-                  {experience.position} at {experience.company}
-                </CommonText>
-                <CommonText className="text-md">
-                  {experience.duration}
-                </CommonText>
-                <CommonText className="text-justify">
-                  {experience.description}
+              <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center">
+                <div>
+                  <DisplayText className="text-2xl font-bold text-amber-200">
+                    {experience.jobTitle}
+                  </DisplayText>
+                  <CommonText className="text-lg text-amber-50">
+                    {experience.companyName}
+                  </CommonText>
+                </div>
+                <CommonText className="text-sm text-amber-50/80">
+                  {formatDate(experience.startDate)} -{" "}
+                  {experience.endDate
+                    ? formatDate(experience.endDate)
+                    : "Present"}
                 </CommonText>
               </div>
+
+              <ul className="space-y-2 list-disc pl-4">
+                {experience.bulletPoints.map((bulletPoint, index) => (
+                  <li key={index} className="text-md">
+                    <CommonText className="text-amber-50">
+                      {bulletPoint.bulletPoint}
+                    </CommonText>
+                  </li>
+                ))}
+              </ul>
+
+              {experience.thingsLearned && (
+                <div className="mt-2 pt-4 border-t border-yellow-100">
+                  <CommonText className="text-justify italic text-amber-50/90">
+                    {experience.thingsLearned}
+                  </CommonText>
+                </div>
+              )}
             </motion.div>
           ))}
         </div>

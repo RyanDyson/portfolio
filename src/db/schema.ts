@@ -13,7 +13,13 @@ export const workExperienceTable = pgTable("work_experience", {
   jobTitle: varchar({ length: 255 }).notNull(),
   startDate: date().notNull(),
   endDate: date().notNull(),
-  description: text().notNull(),
+  thingsLearned: text(),
+});
+
+export const bulletPointsTable = pgTable("bullet_points", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  workExperienceId: integer().references(() => workExperienceTable.id),
+  bulletPoint: text().notNull(),
 });
 
 export const projectsTable = pgTable("projects", {
@@ -31,3 +37,5 @@ export const projectsTable = pgTable("projects", {
 });
 
 export type Project = typeof projectsTable.$inferSelect;
+export type WorkExperience = typeof workExperienceTable.$inferSelect;
+export type BulletPoint = typeof bulletPointsTable.$inferSelect;
