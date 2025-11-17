@@ -229,60 +229,80 @@ export function Profile({
         animate={isShown && "show"}
         className="mt-16"
       >
-        <DisplayText>Work Experience</DisplayText>
-        <div className="flex flex-col gap-y-8 mt-8">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-y-2">
+          <DisplayText className="text-nowrap text-xl">
+            Work Experience
+          </DisplayText>
+          <CommonText className="text-sm md:text-base text-nowrap text-amber-50/80 ">
+            A snapshot of the teams I&apos;ve been working with and the problems
+            I&apos;ve been solving.
+          </CommonText>
+        </div>
+
+        <div className="mt-10 flex flex-col gap-y-8 relative">
+          {/* Timeline spine (desktop only) */}
+          <div className="hidden md:block absolute left-9 top-0 bottom-0 w-px bg-amber-50/20" />
+
           {workExperience.map((experience, index) => (
-            <motion.div
-              key={index}
-              variants={child}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={() => setWorkExperienceIndex(null)}
-              onMouseEnter={() => setWorkExperienceIndex(index)}
-              style={
-                {
-                  "--mouse-x": `${mousePosition.x}px`,
-                  "--mouse-y": `${mousePosition.y}px`,
-                } as React.CSSProperties
-              }
-              className={`relative bg-gradient-to-br from-[rgb(30,58,138)] to-[rgb(30,64,175)] transition-all duration-300 p-6 rounded-xl flex flex-col gap-y-4 overflow-hidden border-2 border-yellow-100 before:content-[''] before:absolute before:inset-0 before:opacity-0 before:transition-opacity before:duration-300 before:ease-out before:bg-[radial-gradient(circle_at_var(--mouse-x)_var(--mouse-y),rgb(59,130,246)_0%,rgb(30,58,138)_75%)] before:pointer-events-none before:-z-10 ${
-                workExperienceIndex === index ? "before:opacity-90" : ""
-              }`}
-            >
-              <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center">
-                <div>
-                  <DisplayText className="text-2xl font-bold text-amber-200">
-                    {experience.jobTitle}
-                  </DisplayText>
-                  <CommonText className="text-lg text-amber-50">
-                    {experience.companyName}
-                  </CommonText>
-                </div>
-                <CommonText className="text-sm text-amber-50/80">
-                  {formatDate(experience.startDate)} -{" "}
-                  {experience.endDate
-                    ? formatDate(experience.endDate)
-                    : "Present"}
-                </CommonText>
+            <div key={index} className="relative flex gap-4 md:pl-6">
+              {/* Timeline dot */}
+              <div className="hidden md:flex w-6 justify-center pt-2">
+                <div className="w-3 h-3 rounded-full border-2 border-amber-200 bg-blue-900" />
               </div>
 
-              <ul className="space-y-2 list-disc pl-4">
-                {experience.bulletPoints.map((bulletPoint, index) => (
-                  <li key={index} className="text-md">
-                    <CommonText className="text-amber-50">
-                      {bulletPoint.bulletPoint}
+              <motion.div
+                variants={child}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={() => setWorkExperienceIndex(null)}
+                onMouseEnter={() => setWorkExperienceIndex(index)}
+                style={
+                  {
+                    "--mouse-x": `${mousePosition.x}px`,
+                    "--mouse-y": `${mousePosition.y}px`,
+                  } as React.CSSProperties
+                }
+                className="relative group flex-1 bg-gradient-to-br from-[rgba(30,64,175,0.95)] via-[rgba(30,64,175,0.9)] to-[rgba(30,64,175,0.85)] transition-colors duration-300 p-6 md:p-7 rounded-2xl flex flex-col gap-y-4 overflow-hidden border border-amber-100/50 before:content-[''] before:absolute before:inset-0 before:opacity-0 before:transition-opacity before:duration-300 before:ease-out before:bg-[radial-gradient(circle_at_var(--mouse-x)_var(--mouse-y),rgba(251,191,36,0.35)_0%,rgba(30,64,175,0)_65%)] before:pointer-events-none before:-z-10 hover:before:opacity-100"
+              >
+                <div className="relative flex flex-col md:flex-row justify-between gap-y-2 md:gap-y-0 md:items-center">
+                  <div className="space-y-1">
+                    <DisplayText className="text-xl md:text-2xl font-semibold text-amber-100">
+                      {experience.jobTitle}
+                    </DisplayText>
+                    <CommonText className="text-sm md:text-base tracking-wide uppercase text-amber-50/80">
+                      {experience.companyName}
                     </CommonText>
-                  </li>
-                ))}
-              </ul>
-
-              {experience.thingsLearned && (
-                <div className="mt-2 pt-4 border-t border-yellow-100">
-                  <CommonText className="text-justify italic text-amber-50/90">
-                    {experience.thingsLearned}
+                  </div>
+                  <CommonText className="text-xs md:text-sm text-amber-50/75 md:text-right whitespace-nowrap">
+                    {formatDate(experience.startDate)} –{" "}
+                    {experience.endDate
+                      ? formatDate(experience.endDate)
+                      : "Present"}
                   </CommonText>
                 </div>
-              )}
-            </motion.div>
+
+                <ul className="mt-3 space-y-2.5">
+                  {experience.bulletPoints.map((bulletPoint, bulletIndex) => (
+                    <li
+                      key={bulletIndex}
+                      className="flex gap-2 text-sm md:text-base"
+                    >
+                      <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-amber-200" />
+                      <CommonText className="text-amber-50/95">
+                        {bulletPoint.bulletPoint}
+                      </CommonText>
+                    </li>
+                  ))}
+                </ul>
+
+                {experience.thingsLearned && (
+                  <div className="mt-4 pt-4 border-t border-amber-100/30">
+                    <CommonText className="text-xs md:text-sm text-amber-50/80 italic text-justify">
+                      {experience.thingsLearned}
+                    </CommonText>
+                  </div>
+                )}
+              </motion.div>
+            </div>
           ))}
         </div>
       </motion.div>
