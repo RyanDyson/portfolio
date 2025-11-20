@@ -40,7 +40,7 @@ export const ProjectCard = ({ item, index, isHovered }: Props) => {
         <motion.div
           className="text-lg w-full px-8 flex flex-col text-wrap md:flex-row justify-between"
           initial={{ fontSize: "1.125rem" }}
-          animate={isHovered ? { fontSize: "3rem" } : { fontSize: "1.125rem" }}
+          animate={isHovered ? { fontSize: "2rem" } : { fontSize: "1.125rem" }}
           transition={{ ease: easeInOut, duration: 0.3 }}
         >
           <DisplayText>{item.title}</DisplayText>
